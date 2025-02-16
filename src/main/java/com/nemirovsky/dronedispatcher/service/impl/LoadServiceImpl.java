@@ -19,7 +19,8 @@ public class LoadServiceImpl implements LoadService {
 
     @Override
     public boolean tryToLoad(Drone drone, Medication medication) {
-        return false;
+        if (medication.getWeight() > (drone.getLoadMax() - drone.getLoad())) return false;
+        return true;
     }
 
     @Override

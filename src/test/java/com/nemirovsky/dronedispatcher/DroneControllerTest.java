@@ -1,11 +1,15 @@
 package com.nemirovsky.dronedispatcher;
 
+import com.nemirovsky.dronedispatcher.model.Drone;
+import com.nemirovsky.dronedispatcher.model.DroneState;
+import com.nemirovsky.dronedispatcher.model.DroneType;
+import com.nemirovsky.dronedispatcher.model.Medication;
+import com.nemirovsky.dronedispatcher.service.LoadService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -17,13 +21,15 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DroneControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private LoadService loadService;
 
     @Test
     public void getAllDronesAndCount() throws Exception {
@@ -47,6 +53,14 @@ public class DroneControllerTest {
                 .andExpect(view().name("drone"))
                 .andExpect(model().attribute("errMsg", equalTo(null)))
                 .andExpect(model().attribute("showMedication", equalTo(true)));
+    }
+
+    @Test
+    public void loadServiceTest() throws Exception {
+        Drone drone = new Drone("1", DroneType.CRUISER, 0, 500, 100, DroneState.IDLE);
+        Medication medication = new Medication("XXX", "Antibiotic", 1000);
+        // assert loadService.tryToLoad(drone, medication);
+        Assertions.assertFalse(loadService.tryToLoad(drone, medication), "Drone not loaded");
     }
 
 
