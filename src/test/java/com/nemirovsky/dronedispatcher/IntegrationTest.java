@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 public class IntegrationTest {
 
@@ -20,6 +22,7 @@ public class IntegrationTest {
         assert d != null;
         assert d.getId() != null;
         assert d.getId().equals("1");
+        assertEquals("1", d.getId(), "Max id should be 1");
         droneRepository.count();
     }
 
